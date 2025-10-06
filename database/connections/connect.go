@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-// Tipos locais para evitar ciclo de importação
 type Database struct {
 	URL     string
 	DBName  string
@@ -27,7 +26,6 @@ type DatabaseObj struct {
 type ConnectionStatus int
 type DatabaseOperation string
 
-// Enum para Status de Conexão
 const (
 	Disconnected ConnectionStatus = iota
 	Connected
@@ -44,7 +42,6 @@ const (
 	OperationDelete     DatabaseOperation = "Delete"
 )
 
-// Variável global para controlar o status da conexão
 var currentConnectionStatus = Disconnected
 
 func ConnectSimulationDatabaseInitial(db Database, data map[string]interface{}) (string, error) {

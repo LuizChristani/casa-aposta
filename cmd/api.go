@@ -38,4 +38,7 @@ func main() {
 			"games": games,
 		})
 	})
+
+	// Iniciar o servidor na porta 8080
+	router.Run(":8080")
 }

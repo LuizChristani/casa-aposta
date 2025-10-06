@@ -7,7 +7,7 @@ import (
 
 func GetAllGames() ([]models.Games, error) {
 	var games []models.Games
-	err := operations.Select(&games)
+	err := operations.Select(&games, models.AllModelsNames[1])
 	if err != nil {
 		return nil, err
 	}

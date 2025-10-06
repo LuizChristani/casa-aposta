@@ -3,12 +3,14 @@ package operations
 import (
 	"encoding/json"
 	"os"
+	"strings"
 )
 
-func Select(result interface{}) error {
-	dataFile := "database/tables/games_data.json"
+func Select(result interface{}, tableName string) error {
+	// Capitalizar a primeira letra para corresponder aos nomes dos arquivos
+	fileName := strings.Title(tableName) + ".json"
+	dataFile := "database/tables/" + fileName
 	if _, err := os.Stat(dataFile); err != nil {
-		// Se o arquivo não existe, retorna slice vazio
 		return nil
 	}
 

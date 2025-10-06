@@ -13,6 +13,7 @@ Uma aplicação de apostas esportivas desenvolvida em Go, utilizando um sistema 
 - [Modelos de Dados](#modelos-de-dados)
 - [API](#api)
 - [Contribuição](#contribuição)
+- [Licença](#-licença)
 
 ## 🎯 Sobre o Projeto
 
@@ -274,7 +275,38 @@ O sistema fornece logs detalhados:
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+**LICENÇA RESTRITIVA - USO NÃO COMERCIAL**
+
+Copyright (c) 2024 Casa Aposta
+
+### Termos e Condições
+
+Este software e a documentação associada (o "Software") são fornecidos sob os seguintes termos:
+
+#### ✅ **PERMITIDO:**
+- ✅ Uso pessoal e educacional
+- ✅ Modificação para uso próprio
+- ✅ Distribuição para fins não comerciais
+- ✅ Estudo e aprendizado
+- ✅ Contribuições para o projeto original
+
+#### ❌ **PROIBIDO:**
+- ❌ **USO COMERCIAL** de qualquer natureza
+- ❌ Venda do software ou de versões modificadas
+- ❌ Uso em produtos ou serviços comerciais
+- ❌ Monetização direta ou indireta
+- ❌ Licenciamento para terceiros com fins lucrativos
+
+#### 📋 **CONDIÇÕES:**
+- O aviso de copyright deve ser mantido em todas as cópias
+- Esta licença deve ser incluída em todas as distribuições
+- Modificações devem ser claramente indicadas
+- O software é fornecido "COMO ESTÁ", sem garantias
+
+#### ⚖️ **VIOLAÇÕES:**
+O uso comercial não autorizado resultará em ação legal imediata.
+
+Para uso comercial, entre em contato para licenciamento especial.
 
 ## 👥 Autores
 
