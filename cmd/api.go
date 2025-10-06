@@ -1,44 +1,41 @@
 package main
 
 import (
+	"casa-aposta/cmd/endpoints"
 	"casa-aposta/database"
 	"casa-aposta/database/connections"
 	"casa-aposta/repository"
-	"casa-aposta/runtime"
+	"casa-aposta/service"
+	"casa-aposta/validator"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-
 	router := gin.Default()
 
+	// Configuração do banco de dados
 	err := database.SetDatabase(map[string]interface{}{
 		"operation": connections.OperationConnect,
 	})
-
 	if err != nil {
 		panic(err)
 	}
 	
-	errorRuntime := runtime.RuntimeVerificationTables() 
-
+	// Verificação das tabelas
+	errorRuntime := validator.RuntimeVerificationTables() 
 	if errorRuntime != nil {
 		panic(errorRuntime)
 	}
 
-	router.GET("/games", func (c *gin.Context){
-		games, err := repository.GetAllGames()
-		if err != nil {
-			c.JSON(500, gin.H{
-				"error": err.Error(),
-			})
-		}
-		c.JSON(200, gin.H{
-			"games": games,
-		})
-	})
+	// Injeção de dependências: Repository -> Service -> Handler
+	gamesRepo := repository.NewGamesRepository()
+	gamesService := service.NewGamesService(gamesRepo)
+	handler := endpoints.NewHandler(gamesService)
 
-	// Iniciar o servidor na porta 8080
+	// Configuração das rotas
+	router.GET("/games", handler.GetAllGames)
+
+	// Inicialização do servidor
 	router.Run(":8080")
 }

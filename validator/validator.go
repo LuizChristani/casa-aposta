@@ -1,4 +1,4 @@
-package runtime
+package validator
 
 import (
 	"casa-aposta/database"
