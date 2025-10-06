@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "description": "Loteria com 6 n�meros",
+    "id": 1,
+    "max_bet": 500,
+    "min_bet": 4.5,
+    "name": "Mega Sena"
+  },
+  {
+    "description": "Descrição do jogo",
+    "id": 2,
+    "max_bet": 1000,
+    "min_bet": 1,
+    "name": "Nome do Jogo"
+  },
+  {
+    "description": "Descrição do jogo",
+    "id": 3,
+    "max_bet": 1000,
+    "min_bet": 1,
+    "name": "Nome do Jogoa"
+  },
+  {
+    "id": 4,
+    "name": "Nome do Jogoaa",
+    "description": "Descrição do jogoa",
+    "min_bet": 1,
+    "max_bet": 1000
+  }
+]

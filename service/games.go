@@ -1,6 +1,7 @@
 package service
 
 import (
+	"casa-aposta/database/operations"
 	"casa-aposta/models"
 	"casa-aposta/repository"
 	"errors"
@@ -10,6 +11,7 @@ import (
 type GamesService interface {
 	GetAllGames() ([]models.Games, error)
 	GetGameByID(id int) (*models.Games, error)
+	CreateGame(game *models.Games) (*models.Games, error)
 	ValidateGame(game *models.Games) error
 }
 
@@ -60,6 +62,35 @@ func (s *gamesService) GetGameByID(id int) (*models.Games, error) {
 	}
 
 	return nil, errors.New("game not found")
+}
+
+// CreateGame cria um novo game com validações de negócio
+func (s *gamesService) CreateGame(game *models.Games) (*models.Games, error) {
+	// Validar o game antes de criar
+	if err := s.ValidateGame(game); err != nil {
+		return nil, err
+	}
+
+	// Verificar se já existe um game com o mesmo nome
+	existingGames, err := s.repository.GetAllGames()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, existingGame := range existingGames {
+		if existingGame.Name == game.Name {
+			return nil, errors.New("game with this name already exists")
+		}
+	}
+
+	game.ID = int(operations.GenerateID("Games"))
+	// Criar o game no repositório
+	createdGame, err := s.repository.CreateGame(game)
+	if err != nil {
+		return nil, err
+	}
+
+	return createdGame, nil
 }
 
 // ValidateGame valida as regras de negócio de um game

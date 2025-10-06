@@ -35,6 +35,7 @@ func main() {
 
 	// Configuração das rotas
 	router.GET("/games", handler.GetAllGames)
+	router.POST("/games", handler.CreateGame)
 
 	// Inicialização do servidor
 	router.Run(":8080")

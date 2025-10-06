@@ -8,6 +8,7 @@ import (
 // GamesRepository interface define os métodos do repositório de games
 type GamesRepository interface {
 	GetAllGames() ([]models.Games, error)
+	CreateGame(game *models.Games) (*models.Games, error)
 }
 
 // gamesRepository implementa GamesRepository
@@ -26,4 +27,13 @@ func (r *gamesRepository) GetAllGames() ([]models.Games, error) {
 		return nil, err
 	}
 	return games, nil
+}
+
+// CreateGame cria um novo game no banco de dados
+func (r *gamesRepository) CreateGame(game *models.Games) (*models.Games, error) {
+	err := operations.InsertModel(game, models.AllModelsNames[1])
+	if err != nil {
+		return nil, err
+	}
+	return game, nil
 }

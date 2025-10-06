@@ -1,6 +1,8 @@
 package endpoints
 
 import (
+	"casa-aposta/contract/games"
+	"casa-aposta/models"
 	"casa-aposta/service"
 	"net/http"
 
@@ -27,4 +29,28 @@ func (h *Handler) GetAllGames(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, games)
+}
+
+// CreateGame endpoint para criar um novo game
+func (h *Handler) CreateGame(c *gin.Context) {
+	var game games.CreateGamesRequest
+	if err := c.ShouldBindJSON(&game); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	
+
+	createdGame, err := h.GamesService.CreateGame(&models.Games{
+		Name:        game.Name,
+		Description: game.Description,
+		MinBet:      game.MinBet,
+		MaxBet:      game.MaxBet,
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, createdGame)
 }
