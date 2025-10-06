@@ -21,8 +21,15 @@
     "name": "Nome do Jogoa"
   },
   {
+    "description": "Descrição do jogoa",
     "id": 4,
-    "name": "Nome do Jogoaa",
+    "max_bet": 1000,
+    "min_bet": 1,
+    "name": "Nome do Jogoaa"
+  },
+  {
+    "id": 5,
+    "name": "Nome do Jogoaaa",
     "description": "Descrição do jogoa",
     "min_bet": 1,
     "max_bet": 1000
