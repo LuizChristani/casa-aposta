@@ -1,0 +1,7 @@
+{
+  "name": {
+    "URL": "connection@mydb",
+    "DBName": "casa_aposta",
+    "DBSenha": "123456"
+  }
+}
