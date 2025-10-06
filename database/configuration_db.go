@@ -1,6 +1,7 @@
 package database
 
 import (
+	"casa-aposta/database/connections"
 	"errors"
 )
 
@@ -10,16 +11,30 @@ const (
 	DBSenha = "123456"
 )
 
+type Database struct {
+	URL     string
+	DBName  string
+	DBSenha string
+}
+
+type DatabaseObj struct {
+	Database struct {
+		URL     string  `json:"URL"`
+		DBName  string  `json:"DBName"`
+		DBSenha string  `json:"DBSenha"`
+	} `json:"name"`
+}
+
 func SetDatabase(data map[string] interface{}) error {
 	if URL == "" || DBName == "" || DBSenha == "" {
 		return errors.New("database: URL, DBName, DBSenha are not valid")
 	}
-	db := Database{
+	db := connections.Database{
 		URL: URL,
 		DBName: DBName,
 		DBSenha: DBSenha,
 	}
-	_, err := ConnectSimulationDatabase(db, data)
+	_, err := connections.ConnectSimulationDatabaseInitial(db, data)
 
 	if err != nil {
 		return err

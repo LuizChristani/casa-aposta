@@ -1,5 +1,6 @@
 package models
 
 var AllModels = []interface{}{
-	Usuario{},
+	User{},
+	Games{},
 }

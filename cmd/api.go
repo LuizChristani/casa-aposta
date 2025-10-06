@@ -2,38 +2,40 @@ package main
 
 import (
 	"casa-aposta/database"
+	"casa-aposta/database/connections"
+	"casa-aposta/repository"
 	"casa-aposta/runtime"
-	"fmt"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	// Primeiro conecta ao banco
+
+	router := gin.Default()
+
 	err := database.SetDatabase(map[string]interface{}{
-		"operation": database.OperationConnect,
+		"operation": connections.OperationConnect,
 	})
 
 	if err != nil {
 		panic(err)
 	}
 	
-	// Depois verifica as tabelas (agora que está conectado)
 	errorRuntime := runtime.RuntimeVerificationTables() 
 
 	if errorRuntime != nil {
 		panic(errorRuntime)
 	}
 
-	data := map[string]interface{}{
-		"name": "Tigrinho",
-		"tipo": "esports", 
-		"score": 100,
-	}
-
-	err = database.Insert(data)
-	if err != nil {
-		fmt.Println("Error inserting data:", err)
-		return
-	}
-
-	fmt.Println("Data inserted successfully")
+	router.GET("/games", func (c *gin.Context){
+		games, err := repository.GetAllGames()
+		if err != nil {
+			c.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+		}
+		c.JSON(200, gin.H{
+			"games": games,
+		})
+	})
 }
