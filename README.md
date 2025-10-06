@@ -1,115 +1,72 @@
 # 🎰 Casa Aposta
 
-Uma aplicação de apostas esportivas desenvolvida em Go, utilizando um sistema de banco de dados baseado em arquivos JSON para armazenamento de dados.
+Uma aplicação backend simples desenvolvida em Go, utilizando arquivos JSON para armazenamento de dados e o framework Gin para API REST.
 
 ## 📋 Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
-- [Arquitetura](#arquitetura)
+- [Estado Atual](#estado-atual)
 - [Estrutura do Projeto](#estrutura-do-projeto)
-- [Banco de Dados JSON](#banco-de-dados-json)
 - [Instalação](#instalação)
 - [Como Usar](#como-usar)
+- [API Disponível](#api-disponível)
 - [Modelos de Dados](#modelos-de-dados)
-- [API](#api)
-- [Contribuição](#contribuição)
+- [Arquitetura](#arquitetura)
 - [Licença](#-licença)
 
 ## 🎯 Sobre o Projeto
 
-Casa Aposta é uma aplicação backend para gerenciamento de apostas esportivas. O projeto utiliza uma arquitetura simples e eficiente, com armazenamento de dados em arquivos JSON, proporcionando uma solução leve e de fácil manutenção.
+Casa Aposta é um projeto backend **em desenvolvimento inicial** para gerenciamento de jogos. Atualmente implementa apenas funcionalidades básicas de listagem de jogos através de uma API REST simples.
 
-### Características Principais
+### ⚠️ Estado Atual - Funcionalidades Implementadas
 
-- ✅ Sistema de banco de dados baseado em JSON
-- ✅ Arquitetura modular e escalável
-- ✅ Gerenciamento de usuários
-- ✅ Sistema de jogos e apostas
-- ✅ API RESTful (em desenvolvimento)
-- ✅ Configuração flexível de banco de dados
+- ✅ Sistema básico de banco de dados JSON
+- ✅ Modelo de dados para Games e User
+- ✅ API REST com endpoint GET /games
+- ✅ Estrutura de projeto organizada
+- ✅ Configuração com Gin framework
 
-## 🏗️ Arquitetura
+### 🚧 Em Desenvolvimento/Planejado
 
-O projeto segue uma arquitetura em camadas bem definida:
-
-```
-Casa Aposta
-├── Camada de Apresentação (cmd/)
-├── Camada de Modelos (models/)
-├── Camada de Serviços (service/) - Em desenvolvimento
-├── Camada de Repositório (repository/) - Em desenvolvimento
-├── Camada de Dados (database/)
-└── Camada de Runtime (runtime/)
-```
-
-### Componentes Principais
-
-- **CMD**: Ponto de entrada da aplicação
-- **Models**: Definição das estruturas de dados
-- **Database**: Gerenciamento do banco de dados JSON
-- **Runtime**: Verificações e validações em tempo de execução
-- **Service**: Lógica de negócio (planejado)
-- **Repository**: Camada de acesso aos dados (planejado)
+- ❌ Sistema de apostas (não implementado)
+- ❌ Autenticação de usuários (não implementado)
+- ❌ CRUD completo (apenas leitura implementada)
+- ❌ Lógica de negócio (service layer vazio)
+- ❌ Validações de dados
+- ❌ Testes automatizados
 
 ## 📁 Estrutura do Projeto
 
 ```
 casa-aposta/
 ├── cmd/
-│   └── api.go                 # Ponto de entrada da aplicação
+│   └── api.go                    # Ponto de entrada - servidor HTTP
 ├── database/
-│   ├── configuration_db.go   # Configuração do banco de dados
-│   ├── database.go          # Operações do banco de dados
-│   ├── database/
-│   │   └── database.json    # Configurações de conexão
+│   ├── configuration_db.go      # Configuração do banco
+│   ├── database.go              # Operações básicas
+│   ├── connections/
+│   │   ├── connect.go           # Conexão com "banco"
+│   │   └── status.go            # Status da conexão
+│   ├── operations/
+│   │   ├── insert.go            # Operação de inserção
+│   │   └── select.go            # Operação de seleção
 │   └── tables/
-│       └── games_data.json  # Dados dos jogos
+│       ├── Games.json           # Dados dos jogos (vazio: [])
+│       └── User.json            # Dados dos usuários (vazio: [])
 ├── models/
-│   ├── all_models.go        # Registro de todos os modelos
-│   └── usuario.go           # Modelo de usuário
-├── repository/              # Camada de repositório (vazio)
+│   ├── all_models.go            # Lista de modelos
+│   ├── games.go                 # Modelo Games
+│   └── user.go                  # Modelo User
+├── repository/
+│   └── games.go                 # Repository para games (básico)
+├── service/
+│   └── games.go                 # Service layer (vazio)
 ├── runtime/
-│   └── runtime.go           # Verificações de runtime
-├── service/                 # Camada de serviços (vazio)
-├── go.mod                   # Dependências do Go
-└── README.md               # Este arquivo
+│   └── runtime.go               # Verificações de runtime
+├── go.mod                       # Dependências Go
+├── go.sum                       # Lock de dependências
+└── LICENSE                      # Licença restritiva
 ```
-
-## 💾 Banco de Dados JSON
-
-O projeto utiliza um sistema de banco de dados baseado em arquivos JSON, onde cada arquivo representa uma "tabela":
-
-### Estrutura do Banco de Dados
-
-#### 1. Configuração (`database/database/database.json`)
-```json
-{
-  "name": {
-    "URL": "localhost:5432",
-    "DBName": "casa_aposta_db",
-    "DBSenha": "senha123"
-  }
-}
-```
-
-#### 2. Dados dos Jogos (`database/tables/games_data.json`)
-```json
-[
-  {
-    "name": "Tigrinho",
-    "score": 100,
-    "tipo": "esports"
-  }
-]
-```
-
-### Vantagens do Sistema JSON
-
-- **Simplicidade**: Fácil de entender e modificar
-- **Portabilidade**: Funciona em qualquer ambiente
-- **Versionamento**: Pode ser versionado com Git
-- **Debugging**: Fácil visualização dos dados
-- **Performance**: Adequado para aplicações pequenas e médias
 
 ## 🚀 Instalação
 
@@ -126,152 +83,169 @@ O projeto utiliza um sistema de banco de dados baseado em arquivos JSON, onde ca
    cd casa-aposta
    ```
 
-2. **Inicialize o módulo Go** (se necessário)
+2. **Instale as dependências**
    ```bash
    go mod tidy
    ```
 
-3. **Verifique a estrutura do banco de dados**
+3. **Execute a aplicação**
    ```bash
-   # Certifique-se de que os arquivos JSON existem:
-   # - database/database/database.json
-   # - database/tables/games_data.json
+   go run cmd/api.go
    ```
 
 ## 🎮 Como Usar
 
-### Executando a Aplicação
+### Executando o Servidor
 
 ```bash
-# Execute a aplicação principal
 go run cmd/api.go
 ```
 
 ### Saída Esperada
 
 ```
-Database connected successfully!
-Data inserted successfully!
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+database: get table name User
+database: table User exists
+database: get table name Games
+database: table Games exists
+[GIN-debug] GET    /games                    --> main.main.func1 (3 handlers)
+[GIN-debug] Listening and serving HTTP on :8080
 ```
 
-### Operações Disponíveis
+### Testando a API
 
-1. **Conexão com Banco de Dados**: Estabelece conexão usando as configurações JSON
-2. **Inserção de Dados**: Adiciona novos jogos à tabela de games
-3. **Verificação de Runtime**: Valida a integridade dos modelos
+```bash
+# Listar jogos (retorna array vazio por padrão)
+curl http://localhost:8080/games
+```
+
+**Resposta:**
+```json
+{
+  "games": []
+}
+```
+
+## 🔧 API Disponível
+
+### Endpoints Implementados
+
+| Método | Endpoint | Descrição | Status |
+|--------|----------|-----------|--------|
+| GET | `/games` | Lista todos os jogos | ✅ Funcionando |
+
+### Endpoints Planejados (Não Implementados)
+
+- `POST /games` - Criar jogo
+- `GET /games/:id` - Obter jogo específico
+- `PUT /games/:id` - Atualizar jogo
+- `DELETE /games/:id` - Deletar jogo
+- `GET /users` - Listar usuários
+- `POST /users` - Criar usuário
+- Sistema de autenticação
+- Sistema de apostas
 
 ## 📊 Modelos de Dados
 
-### Usuario
+### Games
 
 ```go
-type Usuario struct {
-    ID       int    `json:"id"`
-    Name     string `json:"name"`
-    Password string `json:"password"`
+type Games struct {
+    ID          int     `json:"id"`
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    MinBet      float64 `json:"min_bet"`
+    MaxBet      float64 `json:"max_bet"`
 }
 ```
 
-**Campos:**
-- `ID`: Identificador único do usuário
-- `Name`: Nome do usuário
-- `Password`: Senha do usuário
+### User
 
-### Game (Implícito)
-
-```json
-{
-  "name": "string",    // Nome do jogo
-  "score": "number",   // Pontuação
-  "tipo": "string"     // Tipo do jogo (ex: esports)
+```go
+type User struct {
+    ID       int
+    Name     string
+    Password string
+    Saldo    float32
 }
 ```
 
-## 🔧 API
+**Nota:** O modelo User não possui tags JSON implementadas.
 
-### Endpoints Planejados
+## 🏗️ Arquitetura
+
+### Arquitetura Atual (Simples)
 
 ```
-GET    /api/users          # Listar usuários
-POST   /api/users          # Criar usuário
-GET    /api/users/:id      # Obter usuário específico
-PUT    /api/users/:id      # Atualizar usuário
-DELETE /api/users/:id      # Deletar usuário
-
-GET    /api/games          # Listar jogos
-POST   /api/games          # Criar jogo
-GET    /api/games/:id      # Obter jogo específico
-PUT    /api/games/:id      # Atualizar jogo
-DELETE /api/games/:id      # Deletar jogo
+HTTP Request → Gin Router → Repository → JSON Files
 ```
 
-*Nota: A API está em desenvolvimento. Atualmente, apenas operações básicas de banco de dados estão implementadas.*
+### Camadas Implementadas
 
-## 🛠️ Desenvolvimento
+- **CMD**: Servidor HTTP com Gin
+- **Repository**: Acesso básico aos dados (apenas leitura)
+- **Models**: Estruturas de dados
+- **Database**: Sistema de arquivos JSON
 
-### Adicionando Novos Modelos
+### Camadas Planejadas (Não Implementadas)
 
-1. **Crie o modelo** em `models/`
-   ```go
-   type NovoModelo struct {
-       ID   int    `json:"id"`
-       Nome string `json:"nome"`
-   }
-   ```
+- **Service**: Lógica de negócio (arquivo vazio)
+- **Middleware**: Autenticação, validação
+- **Tests**: Testes automatizados
 
-2. **Registre o modelo** em `models/all_models.go`
-   ```go
-   var AllModels = []interface{}{
-       Usuario{},
-       NovoModelo{}, // Adicione aqui
-   }
-   ```
+## 💾 Sistema de "Banco de Dados"
 
-3. **Crie a tabela JSON** em `database/tables/`
-   ```json
-   []
-   ```
+O projeto utiliza arquivos JSON como banco de dados:
 
-### Adicionando Novas Operações de Banco
+- **Games.json**: Armazena dados dos jogos (atualmente vazio: `[]`)
+- **User.json**: Armazena dados dos usuários (atualmente vazio: `[]`)
 
-1. **Implemente a função** em `database/database.go`
-2. **Teste a operação** em `cmd/api.go`
-3. **Documente** a nova funcionalidade
+### Limitações Atuais
 
-## 🧪 Testes
+- Não há persistência real de dados
+- Não há validações
+- Não há transações
+- Performance limitada para grandes volumes
+- Não há índices ou otimizações
 
-```bash
-# Execute a aplicação para testar
-go run cmd/api.go
+## 🔧 Dependências
 
-# Verifique os logs para confirmar:
-# - Conexão com banco de dados
-# - Inserção de dados
-# - Ausência de erros
+### Principais
+
+- **Gin**: Framework web para Go
+- **Go 1.25.1**: Versão do Go utilizada
+
+### Completas (go.mod)
+
+```
+github.com/gin-gonic/gin v1.11.0
+github.com/go-playground/validator/v10 v10.28.0
+github.com/goccy/go-json v0.10.5
+// ... outras dependências transitivas
 ```
 
-## 📝 Logs e Debugging
+## 🚧 Limitações e TODOs
 
-O sistema fornece logs detalhados:
+### Limitações Conhecidas
 
-- ✅ **Sucesso na conexão**: "Database connected successfully!"
-- ✅ **Inserção bem-sucedida**: "Data inserted successfully!"
-- ❌ **Erros**: Mensagens detalhadas de erro
+1. **Dados não persistem** entre reinicializações
+2. **Sem validação** de entrada
+3. **Sem autenticação** ou autorização
+4. **Sem testes** automatizados
+5. **Service layer vazio** - sem lógica de negócio
+6. **Apenas leitura** - sem operações de escrita via API
 
-## 🤝 Contribuição
+### Próximos Passos Sugeridos
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-### Diretrizes de Contribuição
-
-- Mantenha o código limpo e bem documentado
-- Siga as convenções de nomenclatura do Go
-- Teste suas mudanças antes de submeter
-- Atualize a documentação quando necessário
+1. Implementar CRUD completo para Games
+2. Adicionar validações de dados
+3. Implementar persistência real dos dados
+4. Criar testes automatizados
+5. Adicionar sistema de usuários
+6. Implementar autenticação
+7. Desenvolver lógica de apostas
 
 ## 📄 Licença
 
@@ -308,16 +282,6 @@ O uso comercial não autorizado resultará em ação legal imediata.
 
 Para uso comercial, entre em contato para licenciamento especial.
 
-## 👥 Autores
-
-- **Desenvolvedor Principal** - *Trabalho inicial* - [Seu Nome]
-
-## 🙏 Agradecimentos
-
-- Comunidade Go pela excelente documentação
-- Contribuidores do projeto
-- Inspiração em sistemas de apostas modernos
-
 ---
 
-**Casa Aposta** - Transformando apostas em experiências! 🎰✨
+**Casa Aposta** - Projeto em desenvolvimento inicial 🚧
