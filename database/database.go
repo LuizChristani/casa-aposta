@@ -51,8 +51,9 @@ func GetTableName(model string) (string, error){
 	tablePath := "database/tables/" + model + ".json"
 	_, err := os.Stat(tablePath)
 	if err != nil {
-		// Se não conseguir acessar o arquivo, a tabela não existe
+
 		fmt.Printf("database: table %s does not exist, creating...\n", model)
+		
 		if !CreateTablesIfNotExist(map[string]interface{}{
 			"operation": OperationCreate,
 		}, tablePath) {
@@ -61,23 +62,11 @@ func GetTableName(model string) (string, error){
 		fmt.Printf("database: table %s created successfully\n", model)
 	}
 
-	// Se chegou até aqui, a tabela existe
 	fmt.Println("database: table", model, "exists")
 
 	return tablePath, nil
 }
 
-// Função para obter o status atual da conexão
-func GetCurrentConnectionStatus() ConnectionStatus {
-	return currentConnectionStatus
-}
-
-// Função para definir o status da conexão
-func SetConnectionStatus(status ConnectionStatus) {
-	currentConnectionStatus = status
-}
-
-// Método para obter status de uma instância específica
 func (connection *ConnectionStatus) GetStatusConnection() ConnectionStatus {
 	return *connection
 }
