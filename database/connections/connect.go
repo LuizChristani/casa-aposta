@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 )
 
 type Database struct {
@@ -15,11 +14,12 @@ type Database struct {
 	DBSenha string
 }
 
+// Estrutura compatível com o arquivo database/database/database.json
 type DatabaseObj struct {
 	Database struct {
-		URL     string `json:"url"`
-		DBName  string `json:"dbname"`
-		DBSenha string `json:"dbsenha"`
+		URL     string `json:"URL"`
+		DBName  string `json:"DBName"`
+		DBSenha string `json:"DBSenha"`
 	} `json:"name"`
 }
 
@@ -45,53 +45,30 @@ const (
 var currentConnectionStatus = Disconnected
 
 func ConnectSimulationDatabaseInitial(db Database, data map[string]interface{}) (string, error) {
-
-	if currentConnectionStatus != Disconnected {
-		return "", errors.New("database: connection is not disconnected")
-	}
-
-	if data == nil {
-		return "", errors.New("database: data is nil")
-	}
-
-	if data["operation"] == nil {
-		return "", errors.New("database: operation is nil")
+	if data == nil || data["operation"] == nil {
+		return "", errors.New("database: operation is required")
 	}
 
 	if db.URL == "" || db.DBName == "" || db.DBSenha == "" {
 		return "", errors.New("database: URL, DBName, DBSenha are required")
 	}
-	var jsonFile *os.File
-	var err error
-	jsonFile, err = os.Open("database/database/database.json")
-	if err == nil {
-		currentConnectionStatus = Connected
-	} else {
+
+	jsonFile, err := os.Open("database/database/database.json")
+	if err != nil {
 		currentConnectionStatus = Error
+		return "", err
 	}
-	if currentConnectionStatus == Error {
-		return "", errors.New("database: connection is error")
-	}
-
-	if currentConnectionStatus == Connecting {
-		time.Sleep(300 * time.Second)
-		jsonFile, err = os.Open("database/database/database.json")
-		if err != nil {
-			return "", errors.New("database: connection is connecting")
-		}
-		defer jsonFile.Close()
-	}
-
 	defer jsonFile.Close()
 
 	byteValue, err := io.ReadAll(jsonFile)
 	if err != nil {
+		currentConnectionStatus = Error
 		return "", err
 	}
 
-	objDatabase := DatabaseObj{}
-	err = json.Unmarshal(byteValue, &objDatabase)
-	if err != nil {
+	var objDatabase DatabaseObj
+	if err := json.Unmarshal(byteValue, &objDatabase); err != nil {
+		currentConnectionStatus = Error
 		return "", err
 	}
 
@@ -100,20 +77,6 @@ func ConnectSimulationDatabaseInitial(db Database, data map[string]interface{}) 
 		return "", errors.New("database: URL, DBName, DBSenha are not valid")
 	}
 
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s", db.DBName, db.DBSenha, db.URL, db.DBName)
-	currentConnectionStatus = Disconnected
-	return connectionString, nil
-}
-
-func ConnectDatabase(db Database) (string, error) {
-	if currentConnectionStatus != Disconnected {
-		return "", errors.New("database: connection is not disconnected")
-	}
-
-	if db.URL == "" || db.DBName == "" || db.DBSenha == "" {
-		return "", errors.New("database: URL, DBName, DBSenha are required")
-	}
-	
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s)/%s", db.DBName, db.DBSenha, db.URL, db.DBName)
 	currentConnectionStatus = Connected
 	return connectionString, nil
